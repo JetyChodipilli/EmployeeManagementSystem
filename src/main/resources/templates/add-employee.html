@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Employee</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h2>Add Employee</h2>
+    <form th:action="@{/employee/add}" method="post" enctype="multipart/form-data">
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div class="mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" required>
+        </div>
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" required>
+        </div>
+        <div class="mb-3">
+            <label for="middleName" class="form-label">Middle Name</label>
+            <input type="text" class="form-control" id="middleName" name="middleName">
+        </div>
+        <div class="mb-3">
+            <label for="dateOfBirth" class="form-label">Date of Birth</label>
+            <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required>
+        </div>
+        <div class="mb-3">
+            <label for="department" class="form-label">Department</label>
+            <select class="form-control" id="department" name="department" required>
+                <option value="" disabled selected>Select Department</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Support">Support</option>
+                <option value="HR">HR</option>
+                <option value="Finance">Finance</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="salary" class="form-label">Salary</label>
+            <input type="number" class="form-control" id="salary" name="salary" required>
+        </div>
+        <div class="mb-3">
+            <label for="permanentAddress" class="form-label">Permanent Address</label>
+            <textarea class="form-control" id="permanentAddress" name="permanentAddress" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="currentAddress" class="form-label">Current Address</label>
+            <textarea class="form-control" id="currentAddress" name="currentAddress" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="idProofPath" class="form-label">ID Proof (PDF, 10KB-1MB)</label>
+            <input type="file" class="form-control" id="idProof" name="idProof" accept=".pdf" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Employee</button>
+    </form>
+</div>
+</body>
+</html>

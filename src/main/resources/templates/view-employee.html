@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Employee</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h2>Employee Details</h2>
+    <table class="table">
+        <tr>
+            <th>Employee ID</th>
+            <td th:text="${employee.employeeId}"></td>
+        </tr>
+        <tr>
+            <th>First Name</th>
+            <td th:text="${employee.firstName}"></td>
+        </tr>
+        <tr>
+            <th>Last Name</th>
+            <td th:text="${employee.lastName}"></td>
+        </tr>
+        <tr>
+            <th>Middle Name</th>
+            <td th:text="${employee.middleName}"></td>
+        </tr>
+        <tr>
+            <th>Login ID</th>
+            <td th:text="${employee.loginId}"></td>
+        </tr>
+        <tr>
+            <th>Date of Birth</th>
+            <td th:text="${#temporals.format(employee.dateOfBirth, 'dd-MMM-yyyy')}"></td>
+        </tr>
+        <tr>
+            <th>Department</th>
+            <td th:text="${employee.department}"></td>
+        </tr>
+        <tr>
+            <th>Salary</th>
+            <td th:text="${employee.salary}"></td>
+        </tr>
+        <tr>
+            <th>Permanent Address</th>
+            <td th:text="${employee.permanentAddress}"></td>
+        </tr>
+        <tr>
+            <th>Current Address</th>
+            <td th:text="${employee.currentAddress}"></td>
+        </tr>
+        <tr>
+            <th>ID Proof</th>
+            <td th:if="${employee.idProofPath}"><a th:href="@{'/uploads/' + ${employee.idProofPath}}" target="_blank">View PDF</a></td>
+        </tr>
+    </table>
+    <h3>History</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="history : ${employee.history}">
+                <td th:text="${history.action}"></td>
+                <td th:text="${#temporals.format(history.timestamp, 'dd-MMM-yyyy HH:mm:ss')}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/employee/search}" class="btn btn-primary">Back to Search</a>
+</div>
+</body>
+</html>

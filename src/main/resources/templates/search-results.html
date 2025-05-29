@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h2>Search Results</h2>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${param.employeeId != null or param.firstName != null or param.lastName != null or param.loginId != null or param.department != null or param.startDate != null or param.endDate != null}">
+        <h4>Search Criteria</h4>
+        <ul>
+            <li th:if="${param.employeeId != null and !param.employeeId.isEmpty()}">Employee ID: <span th:text="${param.employeeId[0]}"></span></li>
+            <li th:if="${param.firstName != null and !param.firstName.isEmpty()}">First Name: <span th:text="${param.firstName[0]}"></span></li>
+            <li th:if="${param.lastName != null and !param.lastName.isEmpty()}">Last Name: <span th:text="${param.lastName[0]}"></span></li>
+            <li th:if="${param.loginId != null and !param.loginId.isEmpty()}">Login ID: <span th:text="${param.loginId[0]}"></span></li>
+            <li th:if="${param.department != null and !param.department.isEmpty()}">Department: <span th:text="${param.department[0]}"></span></li>
+            <li th:if="${param.startDate != null and !param.startDate.isEmpty()}">Date of Birth (From): <span th:text="${param.startDate[0]}"></span></li>
+            <li th:if="${param.endDate != null and !param.endDate.isEmpty()}">Date of Birth (To): <span th:text="${param.endDate[0]}"></span></li>
+        </ul>
+    </div>
+    <div th:if="${employees.isEmpty()}">
+        <p>No employees found matching your search criteria.</p>
+        <a th:href="@{/employee/search}" class="btn btn-primary">Back to Search</a>
+    </div>
+    <div th:unless="${employees.isEmpty()}">
+        <form th:action="@{/employee/delete}" method="post" id="deleteForm">
+            <input type="hidden" name="formSubmitted" value="true">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll"></th>
+                        <th>Employee ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Login ID</th>
+                        <th>Date of Birth</th>
+                        <th>Department</th>
+                        <th>Salary</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="employee : ${employees}">
+                        <td><input type="checkbox" name="employeeIds" th:value="${employee.employeeId}" class="employeeCheckbox"></td>
+                        <td><a th:href="@{/employee/view/{id}(id=${employee.employeeId})}" th:text="${employee.employeeId}"></a></td>
+                        <td th:text="${employee.firstName}"></td>
+                        <td th:text="${employee.lastName}"></td>
+                        <td th:text="${employee.loginId}"></td>
+                        <td th:text="${#temporals.format(employee.dateOfBirth, 'dd-MMM-yyyy')}"></td>
+                        <td th:text="${employee.department}"></td>
+                        <td th:text="${employee.salary}"></td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" th:href="@{/employee/view/{id}(id=${employee.employeeId})}">View</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/employee/edit/{id}(id=${employee.employeeId})}">Edit</a></li>
+                                    <li>
+                                        <form th:action="@{/employee/delete}" method="post" style="margin: 0;">
+                                            <input type="hidden" name="employeeIds" th:value="${employee.employeeId}">
+                                            <button type="submit" class="dropdown-item">Delete</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-danger" id="deleteButton" disabled>Delete Selected</button>
+        </form>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/employee/results(page=${currentPage - 1}, employeeId=${param.employeeId != null ? param.employeeId[0] : ''}, firstName=${param.firstName != null ? param.firstName[0] : ''}, lastName=${param.lastName != null ? param.lastName[0] : ''}, loginId=${param.loginId != null ? param.loginId[0] : ''}, department=${param.department != null ? param.department[0] : ''}, startDate=${param.startDate != null ? param.startDate[0] : ''}, endDate=${param.endDate != null ? param.endDate[0] : ''})}">Previous</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/employee/results(page=${i}, employeeId=${param.employeeId != null ? param.employeeId[0] : ''}, firstName=${param.firstName != null ? param.firstName[0] : ''}, lastName=${param.lastName != null ? param.lastName[0] : ''}, loginId=${param.loginId != null ? param.loginId[0] : ''}, department=${param.department != null ? param.department[0] : ''}, startDate=${param.startDate != null ? param.startDate[0] : ''}, endDate=${param.endDate != null ? param.endDate[0] : ''})}" th:text="${i + 1}"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/employee/results(page=${currentPage + 1}, employeeId=${param.employeeId != null ? param.employeeId[0] : ''}, firstName=${param.firstName != null ? param.firstName[0] : ''}, lastName=${param.lastName != null ? param.lastName[0] : ''}, loginId=${param.loginId != null ? param.loginId[0] : ''}, department=${param.department != null ? param.department[0] : ''}, startDate=${param.startDate != null ? param.startDate[0] : ''}, endDate=${param.endDate != null ? param.endDate[0] : ''})}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#selectAll").click(function() {
+            $(".employeeCheckbox").prop("checked", this.checked);
+            updateDeleteButton();
+        });
+
+        $(".employeeCheckbox").change(function() {
+            updateDeleteButton();
+        });
+
+        function updateDeleteButton() {
+            const anyChecked = $(".employeeCheckbox:checked").length > 0;
+            $("#deleteButton").prop("disabled", !anyChecked);
+        }
+    });
+</script>
+</body>
+</html>

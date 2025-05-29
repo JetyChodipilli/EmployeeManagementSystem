@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Employee</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h2>Search Employee</h2>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <a th:href="@{/employee/add}" class="btn btn-success mb-3">Add New Employee</a>
+    <form th:action="@{/employee/results}" method="get">
+        <div class="mb-3">
+            <label for="employeeId" class="form-label">Employee ID</label>
+            <input type="text" class="form-control" id="employeeId" name="employeeId">
+        </div>
+        <div class="mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName">
+        </div>
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName">
+        </div>
+        <div class="mb-3">
+            <label for="loginId" class="form-label">Login ID</label>
+            <input type="text" class="form-control" id="loginId" name="loginId">
+        </div>
+        <div class="mb-3">
+            <label for="department" class="form-label">Department</label>
+            <select class="form-control" id="department" name="department">
+                <option value="">Select Department</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Support">Support</option>
+                <option value="HR">HR</option>
+                <option value="Finance">Finance</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="startDate" class="form-label">Date of Birth (From)</label>
+            <input type="date" class="form-control" id="startDate" name="startDate">
+        </div>
+        <div class="mb-3">
+            <label for="endDate" class="form-label">Date of Birth (To)</label>
+            <input type="date" class="form-control" id="endDate" name="endDate">
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+</body>
+</html>

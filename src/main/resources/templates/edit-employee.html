@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Employee</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h2>Edit Employee</h2>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <form th:action="@{/employee/edit/{id}(id=${employee.employeeId})}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="idProofPath" class="form-label">Update ID Proof (PDF, 10KB-1MB)</label>
+            <input type="file" class="form-control" id="idProof" name="idProof" accept=".pdf">
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+</body>
+</html>
